@@ -79,7 +79,7 @@ def aq_markup(_, chat_id):
             ),
         ],
         [
-            InlineKeyboardButton(text="⎯꯭̽🇨🇦꯭꯭ ⃪В꯭α꯭∂⎯꯭ ꯭̽🌸", url="https://t.me/ll_BAD_MUNDA_ll"),
+            InlineKeyboardButton(text="OWNER", url="https://t.me/YO_UR_OFFICIAL_CRUSH"),
         ],
     ]
     return buttons
@@ -112,7 +112,7 @@ def queuemarkup(_, vidid, chat_id):
         ],
 
         [
-            InlineKeyboardButton(text="⎯꯭̽🇨🇦꯭꯭ ⃪В꯭α꯭∂⎯꯭ ꯭̽🌸", url="https://t.me/ll_BAD_MUNDA_ll"),
+            InlineKeyboardButton(text="OWNER ", url="https://t.me/YO_UR_OFFICIAL_CRUSH"),
         ],
     ]
 

@@ -1,13 +1,13 @@
 {
-    "name": "BADMUSIC",
+    "name": "UmikoMusic",
     "description": "Telegram Group Calls streaming bot with some useful features, written in Python with Pyrogram and Py-Tgcalls. Supporting platforms like Youtube, Spotify, Resso, AppleMusic, Soundcloud and M3u8 Links.",
-    "logo": "https://envs.sh/SY-.jpg",
+    "logo": "https://telegra.ph/file/2cc770e2b4de37513dcdc.jpg",
     "keywords": [
     "python3",
     "telegram",
     "bot",
     "BAD",
-    "BADMUSICBot",
+    "UmikoMusic",
     "telegram-bot",
     "pyrogram"
     ],
@@ -16,17 +16,17 @@
     "env": {
       "API_ID": {
         "description": "Get this value from https://my.telegram.org",
-        "value": "",
+        "value": "21911172",
         "required": true
       },
       "API_HASH": {
         "description": "Get this value from https://my.telegram.org",
-        "value": "",
+        "value": "22fee9fa813e7254521310ae5fe000d2",
         "required": true
       },
       "BOT_TOKEN": {
         "description": "A Bot's token Get it from @Botfather",
-        "value": "",
+        "value": "6325577627:AAH5MXGdrsFN6S61GiY6OeSzOrCgAdjhfSw",
         "required": true
       },
       "EXTRA_PLUGINS": {
@@ -36,17 +36,17 @@
       },
       "MONGO_DB_URI": {
         "description": "Get a mongodb url from `https://cloud.mongodb.com` . You can leave it blank if you want , bot will use BAD's database for you.",
-        "value": "",
+        "value": "mongodb+srv://ghoda:loda@cluster0.fgrpret.mongodb.net/?retryWrites=true&w=majority",
         "required": true
       },
       "OWNER_ID": {
         "description": "The user id(s) of user(s) whom you would like to add as a OWNER. Multiple values shall be seperated with a space.",
-        "value": "",
+        "value": "6024212623",
         "required": true
       },
       "STRING_SESSION": {
         "description": "A Pyrogram String Session. One Assistant is Compulsory.",
-        "value": "",
+        "value": "BQFENi0AZDSj8GSgjDUSSlat0ZNypP7_8F-PBLZ8bAOqZSsjaK3LiHsvpZDfAATJLLdaFsiPEELLq_Tk2GfGNfUPH5_0yTDYJbRBljTTISwWkC9Me2cE-kLJyL5t4NF0oXr1Drak8fYCR7c2EGr5HhUiemrVfOi6fNQ5Bu2RY6Upp9ylPsRcG7nDM9oAVXfXORujxGjipErwPURPuAd0M9bw4f8yKMjiIcmKzkwFYHfbQiCr-fkiKzs4Ea6Qbcre31aFnn74WpMAm_BbBP76xQ1PPluQRwcusjKqptKm8_DZVmCIsUWOgmhoYtj1iIXYUViRt9iLr_o8TMaf_ugn6EWJYLILEAAAAAFjRZcLAA",
         "required": true
       },
       "HEROKU_API_KEY": {
@@ -61,12 +61,12 @@
       },
       "LOG_GROUP_ID": {
         "description": "Your Log Group ID, add your bot and promote as an admin with full rights!. Use only Group. Please don't use Channel ID.",
-        "value": "-100",
+        "value": "-1002047838773",
         "required": true
       },
       "UPSTREAM_REPO": {
         "description": "If you dont know this, Leave as it is",
-        "value": "https://github.com/Badhacker98/BADMUSIC",
+        "value": "https://github.com/Mr-Sakil/New",
         "required": true
       },
       "UPSTREAM_BRANCH": {

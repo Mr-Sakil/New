@@ -15,7 +15,7 @@ API_HASH = getenv("API_HASH", "22fee9fa813e7254521310ae5fe000d2")
 
 
 ## Get it from @Botfather in Telegram.
-BOT_TOKEN = getenv("BOT_TOKEN", "6325577627:AAH5MXGdrsFN6S61GiY6OeSzOrCgAdjhfSw")
+BOT_TOKEN = getenv("BOT_TOKEN", "5799143538:AAGZqZUIzAvuENnaS7IEgc_YRq20exLUjms")
 
 
 # Database to save your chats and stats... Get MongoDB:-  https://telegra.ph/How-To-get-Mongodb-URI-04-06
@@ -94,7 +94,7 @@ UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "Bad")
 # GIT TOKEN ( if your edited repo is private)
 GIT_TOKEN = getenv(
     "GIT_TOKEN",
-    "",
+    "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",
 )
 
 
@@ -170,7 +170,7 @@ SET_CMDS = getenv("SET_CMDS", "False")
 
 
 # You'll need a Pyrogram String Session for these vars. Generate String from our session generator bot @VIPStringBot
-STRING1 = getenv("STRING_SESSION", None)
+STRING1 = getenv("STRING_SESSION", "BQFENi0AxFFbe2V9wiPansr7gMyr2Zvxa-Qb81wvkXpykTadSYFP-e5okDPejzcqKEfk-HYxju2uHDKptC-CkNx-5WPffCoqwbNq_zrIu2wfUwVtYhu57gkRI5UksOfLVLIcKtwbgUR9ROArD1SL6ibvBMFXc5wc_jPJOuO61HGswHZAFfUqZy5A-nWYWKlFU9N-8RUsslrdZehLRg9vNlwHZ5xqF67ab-i9wfdMwTabwDG4CfJI-WJ5Aq8mkqA2256tdWCh55IdFEicimWsOPa4L4S6d0rfESVMDfftKryo861MlNOny9XEdmsUbHAygGMfeen19Gvs5QlQO6uc1FHOu65jJAAAAAFjRZcLAA")
 STRING2 = getenv("STRING_SESSION2", None)
 STRING3 = getenv("STRING_SESSION3", None)
 STRING4 = getenv("STRING_SESSION4", None)

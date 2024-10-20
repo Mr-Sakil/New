@@ -1,18 +1,10 @@
-from pyrogram import filters, Client
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-from unidecode import unidecode
+from pyrogram import Client, filters
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
-from BADMUSIC import app
-from BADMUSIC.misc import SUDOERS
-from BADMUSIC.utils.database import (
-    get_active_chats,
-    get_active_video_chats,
-    remove_active_chat,
-    remove_active_video_chat,
-)
+from BADMUSIC.utils.database import get_active_chats, get_active_video_chats
 
 
-@Client.on_message(filters.command(["ac", "activevc", "activevoice"]))
+@Client.on_message(filters.command(["ac", "activevc", "activevoice"], prefixes=["."]))
 async def start(client: Client, message: Message):
     ac_audio = str(len(await get_active_chats()))
     ac_video = str(len(await get_active_video_chats()))
@@ -22,4 +14,3 @@ async def start(client: Client, message: Message):
             [[InlineKeyboardButton("✯ ᴄʟᴏsᴇ ✯", callback_data=f"close")]]
         ),
     )
-

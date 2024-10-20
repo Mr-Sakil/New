@@ -246,7 +246,6 @@ async def is_gbanned_user(user_id: int) -> bool:
         return False
     return True
 
-
 async def add_gban_user(user_id: int):
     is_gbanned = await is_gbanned_user(user_id)
     if is_gbanned:

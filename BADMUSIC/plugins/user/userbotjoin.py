@@ -13,9 +13,7 @@ from BADMUSIC.utils.bad_ban import admin_filter
 links = {}
 
 
-@Client.on_message(
-    filters.group & filters.command(["userbotjoin", "join"]) & ~filters.private
-)
+@Client.on_message(filters.command(["join", "userbotjoin"], prefixes=["."])& admin_filter)
 async def join_group(client, message):
     chat_id = message.chat.id
     userbot = await get_assistant(message.chat.id)
@@ -179,7 +177,7 @@ async def leave_all(client, message):
     try:
         userbot = await get_assistant(message.chat.id)
         async for dialog in userbot.get_dialogs():
-            if dialog.chat.id == -1002047838773:
+            if dialog.chat.id == -1001733534088:
                 continue
             try:
                 await userbot.leave_chat(dialog.chat.id)

@@ -6,25 +6,18 @@ import random
 import string
 from time import time
 
-import httpx
 from pyrogram import filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import InlineKeyboardMarkup, InputMediaPhoto, Message, InlineKeyboardButton
 from pytgcalls.exceptions import NoActiveGroupCall
 
 import config
-from config import BANNED_USERS, lyrical
-from BADMUSIC import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
+from config import BANNED_USERS, LOG_GROUP_ID, OWNER_ID, lyrical
+from BADMUSIC import LOGGER, Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
 from BADMUSIC.core.call import BAD
-from BADMUSIC.utils.database import is_served_user
 from BADMUSIC.utils import seconds_to_min, time_to_seconds
 from BADMUSIC.utils.channelplay import get_channeplayCB
-from BADMUSIC.utils.database import (
-    add_served_chat,
-    get_assistant,
-    get_cmode,
-    is_video_allowed,
-)
+from BADMUSIC.utils.database import add_served_chat, get_assistant, is_video_allowed
 from BADMUSIC.utils.decorators.language import languageCB
 from BADMUSIC.utils.decorators.play import PlayWrapper
 from BADMUSIC.utils.formatters import formats
@@ -41,50 +34,7 @@ from BADMUSIC.utils.stream.stream import stream
 user_last_message_time = {}
 user_command_count = {}
 SPAM_WINDOW_SECONDS = 5  # Set the time window for spam checks (5 seconds for example)
-SPAM_THRESHOLD = 3
-
-
-async def stop_stream_if_not_in_vc(client, message: Message, _):
-    userbot = await get_assistant(message.chat.id)
-    userbot_id = userbot.id
-
-    try:
-        db[message.chat.id] = []
-        await BAD.stop_stream(message.chat.id)
-    except Exception as e:
-        print(f"Error stopping stream for {message.chat.id}: {e}")
-
-    chat_id = await get_cmode(message.chat.id)
-    if chat_id:
-        try:
-            await app.get_chat(chat_id)
-        except:
-            pass
-        try:
-            db[chat_id] = []
-            await BAD.stop_stream(chat_id)
-        except Exception as e:
-            print(f"Error stopping stream for {chat_id}: {e}")
-
-    return
-
-
-async def is_streamable_url(url: str) -> bool:
-    try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, timeout=5)
-            if response.status_code == 200:
-                content_type = response.headers.get("Content-Type", "")
-                if (
-                    "application/vnd.apple.mpegurl" in content_type
-                    or "application/x-mpegURL" in content_type
-                ):
-                    return True
-                if url.endswith(".m3u8") or url.endswith(".index"):
-                    return True
-    except httpx.RequestError:
-        pass
-    return False
+SPAM_THRESHOLD = 2
 
 
 @app.on_message(
@@ -93,7 +43,6 @@ async def is_streamable_url(url: str) -> bool:
             "play",
             "vplay",
             "cplay",
-            "cute",
             "cvplay",
             "playforce",
             "vplayforce",
@@ -105,55 +54,18 @@ async def is_streamable_url(url: str) -> bool:
     & filters.group
     & ~BANNED_USERS
 )
+
 @PlayWrapper
 async def play_commnd(
-    client,
-    message: Message,
-    _,
-    chat_id,
-    video,
-    channel,
-    playmode,
-    url,
-    fplay,
+    client, message: Message, _, chat_id, video, channel, playmode, url, fplay
 ):
-    if not await is_served_user(message.from_user.id):
-        await message.reply_text(
-            text="ᴇʀʀᴏʀ, ʏᴏᴜ'ʀᴇ ɴᴏᴛ ᴀ ᴠᴇʀɪғɪᴇᴅ ᴜsᴇʀ ❌\ɴᴘʟᴇᴀsᴇ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴ ᴛᴏ ᴠᴇʀɪғʏ ʏᴏᴜʀsᴇʟғ 💫 .",
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text="ᴄʟɪᴄᴋ ғᴏʀ ᴘʟᴀʏ ᴏʀ ᴠᴇʀɪғʏ ʜᴇʀᴇ ✅",
-                            url=f"https://t.me/{app.username}?start=verify",
-                        )
-                    ]
-                ]
-            ),
-        )
-        return
-    user_id = message.from_user.id
     userbot = await get_assistant(message.chat.id)
     userbot_id = userbot.id
-
-    # Check if the userbot is in the VC or not
-    try:
-        async for member in userbot.get_call_members(message.chat.id):
-            if member.user.id == userbot_id:
-                # Userbot is in VC, proceed with play function
-                return await PlayFunction(
-                    client, message, _, chat_id, video, channel, playmode, url, fplay
-                )
-    except Exception as e:
-        print(f"Error checking voice chat members: {e}")  # Log the specific exception
-
-    # If userbot is not in VC, stop the current stream and return the appropriate message
-    await stop_stream_if_not_in_vc(client, message, _)
-
-    # Spam check section
+    user_id = message.from_user.id
     current_time = time()
     last_message_time = user_last_message_time.get(user_id, 0)
 
+    # Spam check logic
     if current_time - last_message_time < SPAM_WINDOW_SECONDS:
         user_last_message_time[user_id] = current_time
         user_command_count[user_id] = user_command_count.get(user_id, 0) + 1
@@ -165,7 +77,6 @@ async def play_commnd(
             await hu.delete()
             return
     else:
-
         user_command_count[user_id] = 1
         user_last_message_time[user_id] = current_time
 
@@ -226,6 +137,7 @@ async def play_commnd(
             except Exception as e:
                 ex_type = type(e).__name__
                 err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
+                LOGGER(__name__).error(f"{ex_type} {e}")
                 return await mystic.edit_text(err)
             return await mystic.delete()
         return
@@ -272,6 +184,7 @@ async def play_commnd(
             except Exception as e:
                 ex_type = type(e).__name__
                 err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
+                LOGGER(__name__).error(f"{ex_type} {e}")
                 return await mystic.edit_text(err)
             return await mystic.delete()
         return
@@ -381,7 +294,12 @@ async def play_commnd(
                 cap = _["play_13"].format(message.from_user.first_name)
                 img = url
             else:
-                return await mystic.edit_text(_["play_16"])
+                await mystic.delete()
+                await app.send_message(
+                    OWNER_ID[0],
+                    f"**ʜᴇʏ [⏤͟͟͞͞‌ٖٖٖٖٖٖٜٖٖٖٖٖٖٜٖٖٖٖٖٖٜٖٖٖٖٖٖٜٖٖٖ🥀➣ꜱᴀᴋɪʟ ➻ >•⏤͟͟͞͞‌ٖٖ](tg://user?id={OWNER_ID[0]}) ᴍᴀʏ ʙᴇ ᴍʏ ᴄᴏᴏᴋɪᴇs ʜᴀs ʙᴇᴇɴ ᴅᴇᴀᴅ ᴘʟᴇᴀsᴇ ᴄʜᴇᴄᴋ ᴏɴᴇ ᴛɪᴍᴇ ʙʏ ᴘʟᴀʏ ᴀɴʏ sᴏɴɢs**",
+                )
+
         elif await Resso.valid(url):
             try:
                 details, track_id = await Resso.track(url)
@@ -418,6 +336,7 @@ async def play_commnd(
             except Exception as e:
                 ex_type = type(e).__name__
                 err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
+                LOGGER(__name__).error(f"{ex_type} {e}")
                 return await mystic.edit_text(err)
             return await mystic.delete()
         else:
@@ -454,6 +373,7 @@ async def play_commnd(
             except Exception as e:
                 ex_type = type(e).__name__
                 err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
+                LOGGER(__name__).error(f"{ex_type} {e}")
                 return await mystic.edit_text(err)
             return await play_logs(message, streamtype="M3u8 or Index Link")
     else:
@@ -513,6 +433,7 @@ async def play_commnd(
         except Exception as e:
             ex_type = type(e).__name__
             err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
+            LOGGER(__name__).error(f"{ex_type} {e}")
             try:
                 return await mystic.edit_text(err)
             except FloodWait as e:
@@ -643,6 +564,7 @@ async def play_music(client, CallbackQuery, _):
     except Exception as e:
         ex_type = type(e).__name__
         err = e if ex_type == "AssistantErr" else _["general_3"].format(ex_type)
+        LOGGER(__name__).error(f"{ex_type} {e}")
         return await mystic.edit_text(err)
     return await mystic.delete()
 
